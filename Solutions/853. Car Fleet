@@ -1,0 +1,36 @@
+##Intuition
+Key ideas:
+
+The position determines the order of arrival
+We can calculate arrival time for each car:
+If the previous car has a faster arrival time then we can determine that it's apart of the same fleet since it will be stuck behind it
+##Approach
+My approach was to combine both arrays into a singular array of pairs so we can sort it by position while also having the speed be apart of the position. Once we sort it, we can count backwards how many fleets will reach the target
+
+##Complexity
+Time complexity:
+O(nlog(n)) where n is the number of cars and the time complexity is domincated by the sorting algorithm
+
+Space complexity:
+O(n) To store the pairs
+
+Code
+'''
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        cars = sorted(zip(position, speed), key = lambda x: x[0])
+        last = cars.pop()
+        last_time = (target - last[0]) / last[1]
+        car_fleet = 1
+        while cars:
+            cur = cars.pop()
+            cur_time = (target - cur[0])/ cur[1]
+            if cur_time > last_time:
+                car_fleet += 1
+            else:
+                cur_time = last_time
+            last_time = cur_time
+
+        return car_fleet
+```
+'''
