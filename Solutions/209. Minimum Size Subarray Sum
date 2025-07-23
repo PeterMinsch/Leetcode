@@ -1,0 +1,35 @@
+# Intuition
+This solution utilizes the **sliding window** technique and is a very simple and easy-to-understand approach. The main idea is to **increase the window size** when the sum of the subarray is **less than the target**, and to **shrink the window** when the sum is **greater than or equal to the target**. While shrinking, we track the **minimal window length** that satisfies the condition.
+
+# Approach
+One thing I forgot to do initially was to **avoid using functions that have O(n) time complexity**, such as `sum()` inside loops or slicing. By **keeping the code strictly O(n)**, we ensure optimal performance. The sliding window method does this efficiently by maintaining a running total and adjusting the window dynamically.
+
+# Complexity
+
+- **Time complexity:**  
+  $$O(n)$$  
+  Each element is added to the total once and removed once in the `while` loop.
+
+- **Space complexity:**  
+  $$O(1)$$  
+  We use only a few integer variables. No additional data structures that scale with input size.
+
+# Code
+```python
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        mini_len = 9999999
+        total_sum = 0
+        l = 0
+        for r in range(len(nums)):
+            total_sum += nums[r]
+            while total_sum >= target:
+                if total_sum >= target and mini_len > (r - l) + 1:
+                    mini_len = (r - l) + 1
+                total_sum -= nums[l]
+                l += 1
+
+        if mini_len == 9999999:
+            return 0
+        
+        return mini_len
